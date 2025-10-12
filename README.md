@@ -1,64 +1,109 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# coachtech 勤怠管理アプリ
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## プロジェクト概要
+coachtech 勤怠管理アプリは、ユーザーの勤怠と管理を目的とするアプリケーションです。
 
-## About Laravel
+主な機能：
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- 商品の出品・編集・削除
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- 商品の検索・閲覧
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- いいね機能
 
-## Learning Laravel
+- コメント機能
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- 商品購入（Stripe決済）
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- ユーザー管理
 
-## Laravel Sponsors
+## 環境構築手順
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+-   コンテナを立ち上げる
 
-### Premium Partners
+```
+docker compose up -d --build
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+-   env ファイルの作成をする
 
-## Contributing
+```
+cp src/.env.example src/.env
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+-   php にコンテナに入る
 
-## Code of Conduct
+```
+docker compose exec php bash
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+-   composer パッケージをインストールする
 
-## Security Vulnerabilities
+```
+composer install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+-   アプリケーションキーを作成する
 
-## License
+```
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+-   マイグレーションを実行する
+
+```
+php artisan migrate
+```
+
+-   シーディングを実行する
+
+```
+php artisan db:seed
+```
+
+-   ストレージと公開ディレクトリをリンクする
+
+```
+php artisan storage:link
+```
+
+
+## 使用技術（実行環境）
+-   PHP 8.4.5
+-   Laravel 8.83.29
+-   MySQL 8.0.26
+
+
+## ER図
+![Image](https://github.com/user-attachments/assets/b195e14b-a9be-4302-b91a-708f7ef1995b)
+
+## テスト用ユーザー情報
+
+シーディング実行後、以下のテスト用ユーザーでログインできます：
+
+### 管理者ユーザー
+- **メールアドレス**: admin@example.com
+- **パスワード**: password
+- **役割**: 管理者（全機能利用可能）
+
+### 一般ユーザー
+- **メールアドレス**: test1@example.com
+- **パスワード**: password
+- **役割**: テストユーザー1
+
+- **メールアドレス**: test2@example.com
+- **パスワード**: password
+- **役割**: テストユーザー2
+
+- **メールアドレス**: customer@example.com
+- **パスワード**: password
+- **役割**: 購入テスト用ユーザー
+
+- **メールアドレス**: seller@example.com
+- **パスワード**: password
+- **役割**: 販売者（商品管理テスト用）
+
+## URL
+
+-   開発環境：http://localhost/
+-   phpMyAdmin：http://localhost:8080/
