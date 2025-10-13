@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAttendancesTable extends Migration
+class CreateCorrectionRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateAttendancesTable extends Migration
      */
     public function up()
     {
-        Schema::create('attendances', function (Blueprint $table) {
+        Schema::create('correction_requests', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('attendance_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->date('date');
-            $table->enum('status', ['off', 'working', 'finished']);
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->enum('status', ['pending', 'approved']);
+            $table->text('remarks');
+            $table->timestamp('requested_at');
+            $table->timestamp('approved_at')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateAttendancesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attendances');
+        Schema::dropIfExists('correction_requests');
     }
 }
