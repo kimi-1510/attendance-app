@@ -3,7 +3,7 @@
 
     <!-- 名前 -->
     <div>
-        <label for="mane">名前</label>
+        <label for="name">名前</label>
         <input type="text" name="name" id="name" value="{{ old('name') }}">
         @error('name')
             <div style="color: red;">{{ $message }}</div>
