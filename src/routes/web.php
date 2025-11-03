@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +17,26 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
+// 会員登録
 Route::get('/register', [RegisterController::class, 'create'])->name('register.create');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+
+// メール認証
+Route::get('/email/verify', function () {
+    return view('auth.verify-email'); // メール認証画面を表示
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill(); 
+    return redirect('/attendance'); // メール認証成功時にリダイレクト
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    if ($request->user()->hasVerifiedEmail()) {
+        return redirect('/attendance'); // 既に認証済みの場合はリダイレクト
+    }
+
+    $request->user()->sendEmailVerificationNotification(); // 認証メールを送信
+
+    return back()->with('status', 'verification-link-sent'); // 認証メール送信後のリダイレクト
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');

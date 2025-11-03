@@ -5,10 +5,13 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\LogoutResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Http\Responses\CustomLoginResponse;
+use App\Http\Responses\CustomLogoutResponse;
+
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,9 @@ class FortifyServiceProvider extends ServiceProvider
 
         // 会員登録画面
         Fortify::registerView(fn() => view('auth.register'));
+
+        // メール認証画面
+        Fortify::verifyEmailView(fn() => view('auth.verify-email'));
 
         // ログイン認証処理のカスタマイズ
         // メールアドレスとパスワードが一致したらログイン成功
