@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -40,3 +42,11 @@ Route::post('/email/verification-notification', function (Request $request) {
 
     return back()->with('status', 'verification-link-sent'); // 認証メール送信後のリダイレクト
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+// ログイン画面
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+// 勤怠登録画面
+Route::get('attendance', [AttendanceController::class, 'create'])->middleware(['auth', 'verified'])->name('attendance.create');
+Route::post('attendance', [AttendanceController::class, 'store'])->middleware(['auth', 'verified'])->name('attendance.store');
