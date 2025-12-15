@@ -28,4 +28,13 @@ class LoginController extends Controller
         return back()->with('login_error', 'ログイン情報が登録されていません。');
     }
 
+    // ログアウト処理
+    public function logout(Request $request)
+    {
+        Auth::logout(); // ログアウト処理
+        $request->session()->invalidate(); // セッションを無効化
+        $request->session()->regenerateToken(); // セッショントークンを再生成
+
+        return redirect()->route('login'); // ログイン画面にリダイレクト
+    }
 }

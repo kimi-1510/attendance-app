@@ -47,6 +47,9 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
+// ログアウト
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
 // 勤怠登録画面
 Route::get('attendance', [AttendanceController::class, 'create'])->middleware(['auth', 'verified'])->name('attendance.create');
 Route::post('attendance', [AttendanceController::class, 'store'])->middleware(['auth', 'verified'])->name('attendance.store');
