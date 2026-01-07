@@ -11,10 +11,19 @@ class BreakTime extends Model
 
     protected $table = 'breaks';
 
+    // 一括代入を許可するカラム
     protected $fillable = [
-        'attendance_id', 'break_start', 'break_end'
+        'attendance_id',
+        'break_start',
+        'break_end',
     ];
 
+    protected $casts = [
+        'break_start' => 'datetime',
+        'break_end' => 'datetime',
+    ];
+
+    // リレーション：休憩は勤怠に属する
     public function attendance()
     {
         return $this->belongsTo(Attendance::class);
