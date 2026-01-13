@@ -30,7 +30,7 @@
             <form method="POST" action="{{ route('attendance.store') }}">
                 @csrf
                 <button type="submit" name="action" value="break_start">休憩入</button>
-                <button type="submit" name="action" value="end">退勤</button>                
+                <button type="submit" name="action" value="end">退勤</button>
             </form>
         @endif
 

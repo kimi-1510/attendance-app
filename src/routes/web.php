@@ -53,3 +53,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // 勤怠登録画面
 Route::get('attendance', [AttendanceController::class, 'create'])->middleware(['auth', 'verified'])->name('attendance.create');
 Route::post('attendance', [AttendanceController::class, 'store'])->middleware(['auth', 'verified'])->name('attendance.store');
+
+// 勤怠一覧画面
+Route::get('/attendance/list', [AttendanceController::class, 'index'])->middleware(['auth', 'verified'])->name('attendance.list');
+
+// 勤怠詳細画面
+Route::get('/attendance/{attendance}', [AttendanceController::class, 'show'])->middleware(['auth', 'verified'])->name('attendance.show');

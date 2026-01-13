@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Attendance;
 use App\Models\BreakTime;
 
@@ -96,5 +97,25 @@ class AttendanceController extends Controller
         }
         // 勤怠登録画面にリダイレクト
         return redirect()->route('attendance.create');
+    }
+
+    public function index(Request $request)
+    {
+        // 指定された月の勤怠を取得、なければ今月の勤怠を取得
+        $month = $request->input('month', now()->format('Y-m'));
+
+        // 月初と月末をCarbonで作る
+        $start = Carbon::parse($month . '-01')->startOfMonth();
+        $end = Carbon::parse($month . '-01')->endOfMonth();
+
+        // この月の勤怠を取得
+        $attendances = Attendance::with('breaks')
+            ->where('user_id', auth()->id())
+            ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
+            ->get()
+            ->keyBy('date'); // 日付でアクセスできるようにしておく
+
+        // 勤怠一覧画面に勤怠を渡す
+        return view('attendance.list', compact('attendances', 'month', 'start', 'end'));
     }
 }

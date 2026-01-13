@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class BreakTime extends Model
 {
@@ -32,7 +33,7 @@ class BreakTime extends Model
     public function getDurationInMinutesAttribute()
     {
         if ($this->break_start && $this->break_end) {
-            return \Carbon\Carbon::parse($this->break_start)->diffInMinutes(\Carbon::parse($this->break_end));
+            return Carbon::parse($this->break_start)->diffInMinutes(Carbon::parse($this->break_end));
         }
         return 0;
     }
